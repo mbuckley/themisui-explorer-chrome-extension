@@ -1,0 +1,31 @@
+a {
+  transition: color .6s ease-out;
+  text-decoration: none;
+}
+
+a[href] {
+  color: rgb(17, 85, 204);
+}
+
+hr {
+  margin: 0;
+  padding: 0;
+  height: 8px;
+  border: 0;
+}
+
+.el {
+  white-space: nowrap;
+  line-height: 28px;
+  font-family: 'Noto Sans UI', sans-serif;
+  padding-left: 8px;
+  padding-right: 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+.el:hover,
+.pin {
+  outline: 1px dashed #3e50b4;
+}
