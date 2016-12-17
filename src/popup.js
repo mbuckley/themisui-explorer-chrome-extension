@@ -12,8 +12,8 @@ function hideCustomElements(event) {
 }
 
 function togglePinnedCustomElements(event) {
-  this.classList.toggle('pin');
-  if (this.classList.contains('pin')) {
+  this.classList.toggle('active');
+  if (this.classList.contains('active')) {
     showCustomElements(event);
   } else {
     hideCustomElements();
@@ -24,59 +24,24 @@ function parseLinkHeader(header) {
   if (!header) {
     return;
   }
-  var parts = header.split(',');
-  var links = {};
+  let parts = header.split(',');
+  let links = {};
   for (i=0; i < parts.length; i++) {
-    var section = parts[i].split(';');
-    var url = section[0].replace(/<|>/g, '').trim();
-    var name = section[1].replace(/rel="(.*)"/, '$1').trim();
+    let section = parts[i].split(';');
+    let url = section[0].replace(/<|>/g, '').trim();
+    let name = section[1].replace(/rel="(.*)"/, '$1').trim();
     links[name] = url;
   }
   return links;
 }
 
-function probeCustomElements(elements) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://customelementsio.herokuapp.com/');
-  xhr.onload = function() {
-    var prefix = 'var customElements = ';
-    if (!xhr.response.startsWith(prefix))
-      return;
-    try {
-      var customElements = JSON.parse(xhr.response.substr(prefix.length));
-    } catch(e) {
-      return;
-    }
-    for (var i = 0; i < elements.length; i++) {
-      var results = customElements.filter(function(el) {
-        return el.name === elements[i].textContent;
-      });
-      if (results.length > 0) {
-        elements[i].querySelector('a').href = results[0].url;
-      }
-    }
-  }
-  xhr.send();
+function probeThemisUIElements(elements) {
+  elements.forEach(function(element) {
+    element.querySelector('a').href = 'http://themisui-docs.clio.com/' + element.textContent;
+  });
 }
 
-function probeGooglePolymerElements(elements) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://elements.polymer-project.org/catalog.json');
-  xhr.responseType = 'json';
-  xhr.onload = function() {
-    for (var i = 0; i < elements.length; i++) {
-      var results = xhr.response.elements.filter(function(el) {
-        return el.name === elements[i].textContent;
-      });
-      if (results.length > 0) {
-        elements[i].querySelector('a').href = 'https://github.com/' + results[0].source;
-      }
-    }
-  }
-  xhr.send();
-}
-
-var port;
+let port;
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   port = chrome.tabs.connect(tabs[0].id);
@@ -84,29 +49,40 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   port.postMessage({ action: 'get-custom-elements' });
 
   port.onMessage.addListener(function(response) {
-    var existingElements = document.querySelectorAll('.el');
-    var addSeparator = (existingElements.length !== 0);
+
+    let existingElements = document.querySelectorAll('.el');
+    let addSeparator = (existingElements.length !== 0);
+
+    let containerEle = document.getElementById("components-container");
 
     response.customElements.forEach(function(el) {
-      if (addSeparator) {
-        document.body.appendChild(document.createElement('hr'));
-        addSeparator = false;
-      }
-      var anchor = document.createElement('a');
+      // if (addSeparator) {
+      //   document.body.appendChild(document.createElement('hr'));
+      //   addSeparator = false;
+      // }
+      // let elementListItemEl = document.createElement('li');
+      // elementListItemEl.classList.add('mdl-list__item');
+      //
+      // let elementListItemInnerEl = document.createElement('span');
+      // elementListItemInnerEl.classList.add('mdl-list__item-primary-content');
+
+      let anchor = document.createElement('a');
       anchor.target= '_blank';
       anchor.textContent = el;
-      var element = document.createElement('div');
-      element.classList.add('el');
-      element.appendChild(anchor);
-      element.addEventListener('mouseenter', showCustomElements);
-      element.addEventListener('click', togglePinnedCustomElements);
-      element.addEventListener('mouseleave', hideCustomElements);
-      document.body.appendChild(element);
+      anchor.classList.add('collection-item');
+      // elementListItemInnerEl.appendChild(anchor);
+
+      anchor.addEventListener('mouseenter', showCustomElements);
+      anchor.addEventListener('click', togglePinnedCustomElements);
+      anchor.addEventListener('mouseleave', hideCustomElements);
+
+      containerEle.appendChild(anchor);
     });
 
-    var elements = document.querySelectorAll('.el');
-    probeCustomElements(elements);
-    probeGooglePolymerElements(elements);
+    let elements = document.querySelectorAll('.mdl-list__item');
+    // probeCustomElements(elements);
+    // probeGooglePolymerElements(elements);
+    probeThemisUIElements(elements);
   });
 });
 

@@ -1,31 +1,35 @@
-a {
-  transition: color .6s ease-out;
-  text-decoration: none;
-}
-
-a[href] {
-  color: rgb(17, 85, 204);
-}
-
-hr {
-  margin: 0;
-  padding: 0;
-  height: 8px;
-  border: 0;
-}
-
-.el {
-  white-space: nowrap;
-  line-height: 28px;
-  font-family: 'Noto Sans UI', sans-serif;
-  padding-left: 8px;
-  padding-right: 18px;
+.collection {
   user-select: none;
   -webkit-user-select: none;
-  cursor: default;
+  cursor: pointer;
+
+  margin: 0.5rem 0 1rem 0;
+  /*border: 1px solid #e0e0e0;
+  border-radius: 2px;*/
+  overflow: hidden;
+  position: relative;
 }
 
-.el:hover,
-.pin {
-  outline: 1px dashed #3e50b4;
+.collection a.collection-item {
+  background-color: #fff;
+  line-height: 1.5rem;
+  padding: 10px 20px;
+  margin: 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.collection a.collection-item {
+  display: block;
+  cursor: pointer;
+  transition: 0.25s;
+  color: #4285F4;
+}
+
+.collection .collection-item.active {
+    background-color: #4285F4;
+    color: white;
+}
+
+.collection a.collection-item:not(.active):hover {
+    background-color: #ddd;
 }
