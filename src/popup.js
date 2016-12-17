@@ -56,16 +56,6 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     let containerEle = document.getElementById("components-container");
 
     response.customElements.forEach(function(el) {
-      // if (addSeparator) {
-      //   document.body.appendChild(document.createElement('hr'));
-      //   addSeparator = false;
-      // }
-      // let elementListItemEl = document.createElement('li');
-      // elementListItemEl.classList.add('mdl-list__item');
-      //
-      // let elementListItemInnerEl = document.createElement('span');
-      // elementListItemInnerEl.classList.add('mdl-list__item-primary-content');
-
       let anchor = document.createElement('a');
       anchor.target= '_blank';
       anchor.textContent = el;
@@ -79,9 +69,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       containerEle.appendChild(anchor);
     });
 
-    let elements = document.querySelectorAll('.mdl-list__item');
-    // probeCustomElements(elements);
-    // probeGooglePolymerElements(elements);
+    let elements = document.querySelectorAll('.mdl-list__item');ß
     probeThemisUIElements(elements);
   });
 });
