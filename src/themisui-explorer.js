@@ -3,16 +3,17 @@
 var originalOutline;
 var originalBackgroundColor;
 
-/*
-*/
 document.addEventListener('DOMContentLoaded', function onDomChange() {
- showPageAction();
+  let results = document.evaluate( "count(//*[starts-with(name(),'th-')])",
+                document, null, XPathResult.ANY_TYPE, null );
+
+  if(results.numberValue > 0) {
+    showPageAction();
+  }
 });
 
 function showPageAction() {
- // Send message to background.js when WebComponentsReady or
- // polymer-ready is fired.
- chrome.runtime.sendMessage({ action: 'show-page-action' });
+  chrome.runtime.sendMessage({ action: 'show-page-action' });
 }
 
 chrome.runtime.onConnect.addListener(function(port) {
