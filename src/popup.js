@@ -20,21 +20,6 @@ function togglePinnedCustomElements(event) {
   }
 }
 
-function parseLinkHeader(header) {
-  if (!header) {
-    return;
-  }
-  let parts = header.split(',');
-  let links = {};
-  for (i=0; i < parts.length; i++) {
-    let section = parts[i].split(';');
-    let url = section[0].replace(/<|>/g, '').trim();
-    let name = section[1].replace(/rel="(.*)"/, '$1').trim();
-    links[name] = url;
-  }
-  return links;
-}
-
 function probeThemisUIElements(elements) {
   elements.forEach(function(element) {
     element.querySelector('a').href = 'http://themisui-docs.clio.com/' + element.textContent;
