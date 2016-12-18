@@ -64,6 +64,7 @@ chrome.runtime.onConnect.addListener(function(port) {
          element.style.setProperty('outline', '1px solid #95a5a6');
          element.style.setProperty('background-color', 'rgba(52, 152, 219, 0.5)');
          //TODO: compose method for tooltip creation
+         //TODO: replace with proper template render #hackfornow
          let tooltip = document.getElementById(element.localName + '-themisui-explorer-tooltip');
          if(tooltip) {
            tooltip.style.setProperty('display', 'block');
@@ -82,6 +83,8 @@ chrome.runtime.onConnect.addListener(function(port) {
            tooltip.style.setProperty('color', '#ecf0f1');
            tooltip.style.setProperty('height', '20px');
            tooltip.style.setProperty('padding', '4px');
+           tooltip.style.setProperty('white-space', 'nowrap');
+           tooltip.style.setProperty('z-index', '50000');
 
            let tooltipArrow = document.createElement('span');
             tooltipArrow.style.setProperty('position', 'absolute');
