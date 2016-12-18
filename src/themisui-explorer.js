@@ -61,8 +61,8 @@ chrome.runtime.onConnect.addListener(function(port) {
        customElements.filter(function(el) {
          return el.localName === msg.filter;
        }).forEach(function(element) {
-         element.style.setProperty('outline', '2px dashed #e74c3c');
-         element.style.setProperty('background-color', '#ecf0f1');
+         element.style.setProperty('outline', '1px solid #95a5a6');
+         element.style.setProperty('background-color', 'rgba(52, 152, 219, 0.5)');
        });
        break;
 

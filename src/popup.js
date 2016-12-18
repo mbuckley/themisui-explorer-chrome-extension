@@ -1,13 +1,13 @@
 function showCustomElements(event) {
   port.postMessage({ action: 'show-custom-elements',
                      filter: event.target.textContent,
-                     pinned: Array.from(document.querySelectorAll('.pin')).map(e => e.textContent)
+                     pinned: Array.from(document.querySelectorAll('.active')).map(e => e.textContent)
                    });
 }
 
 function hideCustomElements(event) {
   port.postMessage({ action: 'hide-custom-elements',
-                     pinned: Array.from(document.querySelectorAll('.pin')).map(e => e.textContent)
+                     pinned: Array.from(document.querySelectorAll('.active')).map(e => e.textContent)
                    });
 }
 
