@@ -4,7 +4,7 @@ var loaders = require('./webpack.loaders');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // local css modules
 loaders.push({
@@ -25,6 +25,7 @@ loaders.push({
 	loader: ExtractTextPlugin.extract('style', 'css')
 });
 
+const ROOT_PATH = path.join(__dirname);
 const DIST_PATH = path.join(__dirname, 'dist');
 const JS_DIST_PATH = path.join(DIST_PATH, 'js');
 
@@ -33,7 +34,7 @@ module.exports = {
 		'./src/js/components/Popup.jsx'
 	],
 	output: {
-		publicPath: '/',
+		publicPath: '',
 		path: DIST_PATH,
 		filename: '[chunkhash].js'
 	},
@@ -44,20 +45,23 @@ module.exports = {
 		loaders
 	},
 	plugins: [
-		new WebpackCleanupPlugin(),
-		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: '"production"'
-			}
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false,
-				screw_ie8: true,
-				drop_console: true,
-				drop_debugger: true
-			}
-		}),
+		new CleanWebpackPlugin([DIST_PATH], {
+      root: ROOT_PATH,
+      verbose: true,
+    }),
+		// new webpack.DefinePlugin({
+		// 	'process.env': {
+		// 		NODE_ENV: '"production"'
+		// 	}
+		// }),
+		// new webpack.optimize.UglifyJsPlugin({
+		// 	compress: {
+		// 		warnings: false,
+		// 		screw_ie8: true,
+		// 		drop_console: true,
+		// 		drop_debugger: true
+		// 	}
+		// }),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new ExtractTextPlugin('[contenthash].css', {
 			allChunks: true
@@ -71,6 +75,7 @@ module.exports = {
 			{ from: 'src/icons/icon19.png', to: path.join(DIST_PATH, 'icons') },
 			{ from: 'src/icons/icon38.png', to: path.join(DIST_PATH, 'icons') },
 			{ from: 'src/icons/icon128.png', to: path.join(DIST_PATH, 'icons') },
+			{ from: 'vendor/**', to: DIST_PATH },
 			{ from: 'src/js/background.js', to: JS_DIST_PATH },
 			{ from: 'src/js/themisui-explorer.js', to: JS_DIST_PATH },
 			{ from: 'src/manifest.json', to: DIST_PATH }

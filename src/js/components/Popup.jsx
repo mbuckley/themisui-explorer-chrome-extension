@@ -1,6 +1,7 @@
 import styles from '../../styles/popup.scss';
 import React from 'react';
 import {render} from 'react-dom';
+import ComponentItem from './ComponentItem';
 // import {initializePopup} from '../popup.js'
 
 //TODO: Render each ComponentItem into the components-container below
@@ -37,17 +38,15 @@ function probeThemisUIElements(elements) {
 
 //FIXME: Find out why this isn't firing...inside of export?
 function initializePopup() {
-  console.log("in initializePopup?");
   let port;
 
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     port = chrome.tabs.connect(tabs[0].id);
-    // Send a message to themisui-explorer.js to get all custom elements.
+    // Send a message to themisui-explorer.js to get all custom elements..
     port.postMessage({ action: 'get-custom-elements' });
 
     port.onMessage.addListener(function(response) {
-
-      render(<Popup elements="response.customElements"/>, document.getElementById('popup'));
+      render(<Popup customElements={response.customElements} />, document.getElementById('popup'));
 
 
       // let existingElements = document.querySelectorAll('.el');
@@ -85,14 +84,18 @@ function initializePopup() {
 class Popup extends React.Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
-    // this.state = {
-    //   color: props.initialColor
-    // };
   }
 
   render () {
-    return <div class="collection">ThemisUI Explorer...</div>
+    return (
+      <div className="component-list">
+        {
+          this.props.customElements.map((componentName, index) => {
+            return <ComponentItem key={index} label={componentName} />
+          })
+        }
+      </div>
+    )
   }
 }
 

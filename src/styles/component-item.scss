@@ -1,0 +1,20 @@
+.componentItem {
+  background-color: #fff;
+  line-height: 1.5rem;
+  padding: 10px 20px;
+  margin: 0;
+  border-bottom: 1px solid #e0e0e0;
+  display: block;
+  cursor: pointer;
+  transition: 0.25s;
+  color: #4285F4;
+}
+
+.componentItem.active {
+    background-color: #4285F4;
+    color: white;
+}
+
+.componentItem:not(.active):hover {
+    background-color: #ddd;
+}
