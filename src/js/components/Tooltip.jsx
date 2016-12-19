@@ -2,6 +2,9 @@ import styles from '../../styles/tooltip.scss';
 import React from 'react';
 import {render} from 'react-dom';
 
+//Tooltip is rendered to the users dom and appended to the current selected
+//element
+
 //TODO: Convert this to component
 // tooltip = document.createElement('div');
 // tooltip.id = element.localName + '-themisui-explorer-tooltip';
