@@ -3,25 +3,24 @@
   "description": "Show an icon in the address bar when it detects some ThemisUI components.",
   "version": "0.9.1",
   "icons": {
-    "128": "assets/icon128.png"
+    "128": "icons/icon128.png"
   },
   "background": {
     "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
   "content_scripts": [
     {
       "all_frames": true,
       "matches": ["<all_urls>"],
-      "js": ["themisui-explorer.js"],
+      "js": ["js/themisui-explorer.js"],
       "run_at": "document_start"
     }
   ],
-  "options_page": "options.html",
   "page_action": {
     "default_icon": {
-      "19": "assets/icon19.png",
-      "38": "assets/icon38.png"
+      "19": "icons/icon19.png",
+      "38": "icons/icon38.png"
     },
     "default_popup": "popup.html",
     "default_title": "ThemisUI Explorer"
