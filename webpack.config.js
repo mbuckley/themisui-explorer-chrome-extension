@@ -3,6 +3,7 @@ var path = require('path');
 var loaders = require('./webpack.loaders');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
 // local css modules
@@ -24,13 +25,16 @@ loaders.push({
 	loader: ExtractTextPlugin.extract('style', 'css')
 });
 
+const DIST_PATH = path.join(__dirname, 'dist');
+const JS_DIST_PATH = path.join(DIST_PATH, 'js');
+
 module.exports = {
 	entry: [
 		'./src/js/components/Popup.jsx'
 	],
 	output: {
 		publicPath: '/',
-		path: path.join(__dirname, 'dist'),
+		path: DIST_PATH,
 		filename: '[chunkhash].js'
 	},
 	resolve: {
@@ -59,9 +63,18 @@ module.exports = {
 			allChunks: true
 		}),
 		new HtmlWebpackPlugin({
+			filename: 'popup.html',
 			template: './src/popup.html',
 			title: 'ThemisUI Explorer'
 		}),
+		new CopyWebpackPlugin([
+			{ from: 'src/icons/icon19.png', to: path.join(DIST_PATH, 'icons') },
+			{ from: 'src/icons/icon38.png', to: path.join(DIST_PATH, 'icons') },
+			{ from: 'src/icons/icon128.png', to: path.join(DIST_PATH, 'icons') },
+			{ from: 'src/js/background.js', to: JS_DIST_PATH },
+			{ from: 'src/js/themisui-explorer.js', to: JS_DIST_PATH },
+			{ from: 'src/manifest.json', to: DIST_PATH }
+		], {}),
 		new webpack.optimize.DedupePlugin()
 	]
 };

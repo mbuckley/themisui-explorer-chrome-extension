@@ -63,8 +63,7 @@ chrome.runtime.onConnect.addListener(function(port) {
        }).forEach(function(element) {
          element.style.setProperty('outline', '1px solid #95a5a6');
          element.style.setProperty('background-color', 'rgba(52, 152, 219, 0.5)');
-         //TODO: compose method for tooltip creation
-         //TODO: replace with proper template render #hackfornow
+         //TODO: Replace with render of components/Tooltip.jsx
          let tooltip = document.getElementById(element.localName + '-themisui-explorer-tooltip');
          if(tooltip) {
            tooltip.style.setProperty('display', 'block');

@@ -8,9 +8,9 @@ import {render} from 'react-dom';
 // anchor.classList.add('collection-item');
 // elementListItemInnerEl.appendChild(anchor);
 
-anchor.addEventListener('mouseenter', showCustomElements);
-anchor.addEventListener('click', togglePinnedCustomElements);
-anchor.addEventListener('mouseleave', hideCustomElements);
+// anchor.addEventListener('mouseenter', showCustomElements);
+// anchor.addEventListener('click', togglePinnedCustomElements);
+// anchor.addEventListener('mouseleave', hideCustomElements);
 
 class ComponentItem extends React.Component {
   render () {
