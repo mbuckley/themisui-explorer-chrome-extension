@@ -4,13 +4,9 @@ import React from 'react';
 import classnames from 'classnames';
 import {render} from 'react-dom';
 
-//TODO: Add this onclick to a pin icon so it doesn't conflict
-//with the click to see the element docs
-// onClick={this.togglePinnedCustomElements.bind(this)}
 class ComponentItem extends React.Component {
   constructor(props) {
     super(props);
-    console.log("componentItem props", props);
     this.state = { active: false };
   }
 
@@ -25,16 +21,6 @@ class ComponentItem extends React.Component {
       >{this.props.label}</a>
     )
   }
-
-  // togglePinnedCustomElements(e) {
-  //   this.setState({active: this.state.active ? false : true});
-  //
-  //   if (this.state.active) {
-  //     this.showCustomElements(event);
-  //   } else {
-  //     this.hideCustomElements();
-  //   }
-  // }
 
   showCustomElements(event) {
     this.props.port.postMessage({
