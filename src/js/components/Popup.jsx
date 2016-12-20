@@ -1,7 +1,6 @@
-import styles from '../../styles/popup.scss';
 import React from 'react';
 import {render} from 'react-dom';
-import ComponentItem from './ComponentItem';
+import ComponentList from './ComponentList';
 
 let port;
 
@@ -34,13 +33,7 @@ class Popup extends React.Component {
 
   render () {
     return (
-      <div className="component-list">
-        {
-          this.props.customElements.map((componentName, index) => {
-            return <ComponentItem key={index} label={componentName} port={this.state.port} />
-          })
-        }
-      </div>
+      <ComponentList customElements={this.props.customElements} port={this.state.port} />
     )
   }
 }
