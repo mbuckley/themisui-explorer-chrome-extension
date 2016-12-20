@@ -1,7 +1,8 @@
 'use strict';
 
-var originalOutline;
-var originalBackgroundColor;
+let originalOutline;
+let originalBackgroundColor;
+const attributeBlacklist = ['id', 'class', 'style'];
 
 document.addEventListener('DOMContentLoaded', function onDomChange() {
   let results = document.evaluate( "count(//*[starts-with(name(),'th-')])",
@@ -14,6 +15,92 @@ document.addEventListener('DOMContentLoaded', function onDomChange() {
 
 function showPageAction() {
   chrome.runtime.sendMessage({ action: 'show-page-action' });
+}
+
+function createAttributeSeperator() {
+  let seperator = document.createElement('span');
+  seperator.style.setProperty('margin', '0 5px');
+  seperator.style.setProperty('color', '#bdc3c7');
+  seperator.textContent = '|';
+  return seperator;
+}
+
+function createAttributeName(name) {
+  let attributeName = document.createElement('span');
+  attributeName.style.setProperty('color', 'rgb(238, 120, 230)');
+  attributeName.style.setProperty('font-weight', 'bold');
+  attributeName.textContent = name + '=';
+  return attributeName;v
+}
+
+function createAttributeValue(value) {
+  let attributeValue = document.createElement('span');
+  attributeValue.style.setProperty('color', 'rgb(142, 211, 251)');
+  attributeValue.textContent = value;
+  return attributeValue;
+}
+
+/**
+ * Creates a tooltip element and returns
+ */
+function createTooltip(tooltipId, element) {
+  let rect = element.getBoundingClientRect();
+  let elementPadding = 20;
+  let arrowHeight = 20;
+  let styles = {
+    'position': 'fixed',
+    'top': (rect.top - elementPadding - arrowHeight) + 'px',
+    'left': rect.left + 'px',
+    'border': '1px solid #bdc3c7',
+    'border-radius': '4px',
+    'background-color': 'rgba(51, 55, 64, 1)',
+    'font-family': 'Georgia',
+    'color': '#ecf0f1',
+    'height': '20px',
+    'padding': '4px',
+    'white-space': 'nowrap',
+    'z-index': '50000'
+  };
+
+  let arrowStyles = {
+    'position': 'absolute',
+    'bottom': '-8px',
+    'left': '8px',
+    'width': '0px',
+    'height': '0px',
+    'border-left': '8px solid transparent',
+    'border-right': '8px solid transparent',
+    'border-top': '8px solid transparent',
+  };
+
+  let tooltip = document.createElement('div');
+  tooltip.id = tooltipId;
+  Object.keys(styles).forEach(function(styleKey) {
+    tooltip.style.setProperty(styleKey, styles[styleKey]);
+  });
+
+  let tooltipArrow = document.createElement('span');
+  Object.keys(arrowStyles).forEach(function(styleKey) {
+    tooltipArrow.style.setProperty(styleKey, tooltipArrow[styleKey]);
+  });
+
+  let attrCount = 0;
+  //Add the element attributes to the tooltip content
+  Array.prototype.slice.call(element.attributes).forEach(function(item) {
+    if(attributeBlacklist.indexOf(item.name) === -1) {
+
+      if(attrCount > 0) {
+        tooltip.appendChild(createAttributeSeperator());
+      }
+
+      tooltip.appendChild(createAttributeName(item.name));
+      tooltip.appendChild(createAttributeValue(item.value));
+      attrCount++;
+   }
+
+  });
+  tooltip.appendChild(tooltipArrow);
+  return tooltip;
 }
 
 chrome.runtime.onConnect.addListener(function(port) {
@@ -63,72 +150,13 @@ chrome.runtime.onConnect.addListener(function(port) {
        }).forEach(function(element) {
          element.style.setProperty('outline', '1px solid #95a5a6');
          element.style.setProperty('background-color', 'rgba(52, 152, 219, 0.5)');
-         //TODO: Replace with render of components/Tooltip.jsx
-         let tooltip = document.getElementById(element.localName + '-themisui-explorer-tooltip');
+         let tooltipId = element.localName + '-themisui-explorer-tooltip';
+
+         let tooltip = document.getElementById(tooltipId);
          if(tooltip) {
            tooltip.style.setProperty('display', 'block');
          } else {
-           tooltip = document.createElement('div');
-           tooltip.id = element.localName + '-themisui-explorer-tooltip';
-           tooltip.style.setProperty('position', 'fixed');
-           var rect = element.getBoundingClientRect();
-           // top - padding - tooltipArrowHeight
-           tooltip.style.setProperty('top', (rect.top - 20 - 20) + "px");
-           tooltip.style.setProperty('left', rect.left + "px");
-           tooltip.style.setProperty('border', '1px solid #bdc3c7');
-           tooltip.style.setProperty('border-radius', '4px');
-           tooltip.style.setProperty('background-color', 'rgba(51, 55, 64, 1)');
-           tooltip.style.setProperty('font-family', 'Georgia');
-           tooltip.style.setProperty('color', '#ecf0f1');
-           tooltip.style.setProperty('height', '20px');
-           tooltip.style.setProperty('padding', '4px');
-           tooltip.style.setProperty('white-space', 'nowrap');
-           tooltip.style.setProperty('z-index', '50000');
-
-           let tooltipArrow = document.createElement('span');
-            tooltipArrow.style.setProperty('position', 'absolute');
-            tooltipArrow.style.setProperty('bottom', '-8px');
-            tooltipArrow.style.setProperty('left', '8px');
-            tooltipArrow.style.setProperty('width', '0px');
-            tooltipArrow.style.setProperty('height', '0px');
-            tooltipArrow.style.setProperty('border-left', '8px solid transparent');
-            tooltipArrow.style.setProperty('border-right', '8px solid transparent');
-            tooltipArrow.style.setProperty('border-top', '8px solid rgba(51, 55, 64, 1)');
-            tooltip.appendChild(tooltipArrow);
-
-
-           let attributeBlacklist = ['id', 'class', 'style'];
-
-           let attrCount = 0;
-           Array.prototype.slice.call(element.attributes).forEach(function(item) {
-             if(attributeBlacklist.indexOf(item.name) === -1) {
-
-               if(attrCount > 0) {
-                 let seperator = document.createElement('span');
-                 seperator.style.setProperty('margin', '0 5px');
-                 seperator.style.setProperty('color', '#bdc3c7');
-                 seperator.textContent = '|';
-                 tooltip.appendChild(seperator);
-               }
-
-              let attributeName = document.createElement('span');
-              attributeName.style.setProperty('color', 'rgb(238, 120, 230)');
-              attributeName.style.setProperty('font-weight', 'bold');
-              attributeName.textContent = item.name + '=';
-
-              let attributeValue = document.createElement('span');
-              attributeValue.style.setProperty('color', 'rgb(142, 211, 251)');
-              attributeValue.textContent = item.value;
-
-
-              tooltip.appendChild(attributeName);
-              tooltip.appendChild(attributeValue);
-              attrCount++;
-            }
-
-          });
-          tooltip.appendChild(tooltipArrow);
-          element.appendChild(tooltip);
+           element.appendChild(createTooltip(tooltipId, element));
          }
        });
        break;

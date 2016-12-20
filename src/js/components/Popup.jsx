@@ -29,7 +29,6 @@ function initialize() {
 class Popup extends React.Component {
   constructor(props) {
     super(props);
-    console.log("port", port);
     this.state = { port: port };
   }
 
