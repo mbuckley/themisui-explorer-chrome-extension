@@ -1,8 +1,12 @@
 'use strict';
+//TODO: Create element style utility that takes obj and sets up inline styles
 
 let originalOutline;
 let originalBackgroundColor;
 const attributeBlacklist = ['id', 'class', 'style'];
+
+//TODO: make the element selector a config value so this
+//can work with differnt prefixes...
 
 document.addEventListener('DOMContentLoaded', function onDomChange() {
   let results = document.evaluate( "count(//*[starts-with(name(),'th-')])",
@@ -100,7 +104,7 @@ function createTooltip(tooltipId, element) {
 
   });
   tooltip.appendChild(tooltipArrow);
-  return tooltip;
+  return (attrCount > 0) ? tooltip : null;
 }
 
 chrome.runtime.onConnect.addListener(function(port) {
@@ -156,7 +160,10 @@ chrome.runtime.onConnect.addListener(function(port) {
          if(tooltip) {
            tooltip.style.setProperty('display', 'block');
          } else {
-           element.appendChild(createTooltip(tooltipId, element));
+           tooltip = createTooltip(tooltipId, element);
+           if(tooltip) {
+             element.appendChild(tooltip);
+           }
          }
        });
        break;
