@@ -1,7 +1,7 @@
 {
   "name": "ThemisUI Explorer",
   "description": "Show an icon in the address bar when it detects some ThemisUI components.",
-  "version": "0.9.1",
+  "version": "0.9.0",
   "icons": {
     "128": "icons/icon128.png"
   },
