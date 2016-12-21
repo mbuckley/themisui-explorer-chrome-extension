@@ -6,6 +6,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
+//TODO: Replace copy of js files at the bottom and
+//let webpack pack those (background.js & themisui-explorer.js)...
+
 // local css modules
 loaders.push({
 	test: /[\/\\]src[\/\\].*\.css/,
