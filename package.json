@@ -28,10 +28,12 @@
     "sass-loader": "^4.1.0",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
-    "webpack": "1.14.0"
+    "webpack": "1.14.0",
+    "zip-folder": "^1.0.0"
   },
   "scripts": {
     "dev": "webpack --progress --profile --colors --watch",
-    "build": "webpack --progress --profile --colors"
+    "build": "webpack --progress --profile --colors",
+    "postbuild": "node tools/zip_dist.js"
   }
 }
